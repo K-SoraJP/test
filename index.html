@@ -112,9 +112,7 @@
                         const resultText = result.data.text;
                         const regex = /\(([^)]+)\)/g; // 正規表現でかっこの中身を取得
                         const resultWithoutParentheses = resultText.replace(regex, '(         )'); // かっこの中身を消す
-                        const regex2 = /[@＠＃＄％＾＆＊＿＋＝［］｛｝・：；｜『』【】]/g; // 正規表現で不要な記号を取得
-                        const resultWithoutSymbols = resultWithoutParentheses.replace(regex, ''); // 不要な記号を消す
-                        alert(resultWithoutSymbols);
+                        alert(resultWithoutParentheses);
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
