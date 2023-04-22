@@ -109,9 +109,10 @@
                         }
                     })
                     .then(result => {
-
-                        alert(result.data.text);
-
+                        const resultText = result.data.text;
+                        const regex = /\(([^)]+)\)/g; // 正規表現でかっこの中身を取得
+                        const resultWithoutParentheses = resultText.replace(regex, ''); // かっこの中身を消す
+                        alert(resultWithoutParentheses);
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
