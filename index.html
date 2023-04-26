@@ -15,6 +15,9 @@
             <!-- play： カメラの映像をキャンバスにリアルタイムで表示 -->
             <div v-if="status=='play'">
                 <input type="file" @change="handleFileInput">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded" @click="runOcr">
+                    画像から読み取る
+                </button>
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded" @click="takeSnapshot">
                     スナップショットを取る
                 </button>
@@ -140,7 +143,6 @@
                     // this.makeSound(); // 音を鳴らす
                     this.pauseVideo();
                     this.dataUrl = this.canvas.toDataURL();
-
                 },
                 handleFileInput(event) {
                     const file = event.target.files[0];
