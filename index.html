@@ -38,6 +38,8 @@
         </div>
     </div>
     <!-- ① CDNでJavaScriptを読み込み -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-+JZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZQ==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-+JZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZJQJZJZQ==" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3.0.0/dist/vue.global.prod.js"></script>
     <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
     <script>
@@ -115,7 +117,7 @@
                     .then(result => {
                         const resultText = result.data.text;
                         const regex = /\(([^)]+)\)/g; // 正規表現でかっこの中身を取得
-                        const resultWithoutParentheses = resultText.replace(regex, '(     　　　    )'); // かっこの中身を消す
+                        const resultWithoutParentheses = resultText.replace(regex, '(       　　   )'); // かっこの中身を消す
                         alert(resultWithoutParentheses);
                     })
                     .catch(error => console.log(error))
@@ -139,10 +141,28 @@
 
                 },
                 takeSnapshot() { // ② スナップショットを取る（カメラは一時停止）
-
+                    this.context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
                     // this.makeSound(); // 音を鳴らす
                     this.pauseVideo();
                     this.dataUrl = this.canvas.toDataURL();
+                    const cropper = new Cropper(this.$refs.canvas, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        crop(event) {
+                            console.log(event.detail.x);
+                            console.log(event.detail.y);
+                            console.log(event.detail.width);
+                            console.log(event.detail.height);
+                        },
+                        });
+                    const button = document.createElement('button');
+                    button.innerText = '完了';
+                    button.addEventListener('click', () => {
+                        const croppedCanvas = cropper.getCroppedCanvas();
+                        this.dataUrl = croppedCanvas.toDataURL();
+                        cropper.destroy();
+                    });
+                    this.$refs['canvas-container'].appendChild(button);
                 },
                 handleFileInput(event) {
                     const file = event.target.files[0];
